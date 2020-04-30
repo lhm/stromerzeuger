@@ -1,3 +1,8 @@
+data: data/nettonennleistung.csv
+
+data/nettonennleistung.csv: venv
+	./venv/bin/python ./scripts/process.py
+
 venv: scripts/requirements.txt
 	[ -d ./venv ] || python3 -m venv venv
 	./venv/bin/pip install --upgrade pip
@@ -5,7 +10,7 @@ venv: scripts/requirements.txt
 	touch venv
 
 clean:
-	rm -rf data/*.geojson
+	rm -rf data/*.csv
 
 clean-venv:
 	rm -rf venv

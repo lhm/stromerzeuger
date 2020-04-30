@@ -1,0 +1,6 @@
+__pycache__
+
+files/*
+data/*
+!files/mastr-sample-ags-147-2014f.csv
+!data/nettonennleistung.csv
