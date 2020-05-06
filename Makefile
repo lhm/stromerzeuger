@@ -1,6 +1,9 @@
 data: data/nettonennleistung.csv data/nettonennleistung.json
 
-data/nettonennleistung.csv: venv
+data/raw.parquet: venv
+	./venv/bin/python ./scripts/convert.py
+
+data/nettonennleistung.csv: data/raw.parquet
 	./venv/bin/python ./scripts/process.py
 
 data/nettonennleistung.json: data/nettonennleistung.csv
