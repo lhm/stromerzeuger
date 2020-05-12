@@ -3,15 +3,32 @@
 
 <head>
   <meta charset="utf-8">
-
-
   <style>
-    #content .map path {
+    #content {
+      display: flex;
+    }
+
+    #map {
+      background-color: #c0c0c0;
+      flex-grow: 6;
+    }
+
+    #sidebar {
+      background-color: #d9d;
+      flex-grow: 4;
+    }
+
+    #sidebar table {
+      table-layout: fixed;
+      width: 360px;
+    }
+
+    #map .map path {
       fill: #ddd;
       stroke: #aaa;
     }
 
-    #content .map path.highlight {
+    #map .map path.highlight {
       fill: #54c118;
     }
   </style>
@@ -19,19 +36,27 @@
 
 <body>
   <div id="content">
-    <svg width="1200px" height="800px">
-      <g class="map"></g>
-    </svg>
+    <div id="sidebar">
+      <h3>Daten</h3>
+      <table>
+      </table>
+    </div>
+    <div id="map">
+      <svg width="1200px" height="800px">
+        <g class="map"></g>
+      </svg>
+    </div>
   </div>
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script>
     var width = 1200,
-      height = 800;
+      height = 800,
+      mapSelector = '#map g.map';
 
     d3.json('/gemeinden-sn.json')
       .then(function (data) {
-        drawMap('#content g.map', data);
+        drawMap(mapSelector, data);
       })
 
     function drawMap(selector, data) {
@@ -52,15 +77,27 @@
     }
 
     function onClick(d, i) {
-      console.log(d.properties['GEN']);
-      d3.select('#content g.map')
-        .selectAll('path')
-        .classed('highlight', false);
-      this.classList.add('highlight');
+      highlight(this);
+      updateSidebar(d.properties);
     }
 
     function highlight(element) {
+      d3.select(mapSelector)
+        .selectAll('path')
+        .classed('highlight', false);
+      element.classList.add('highlight');
+    }
 
+    function updateSidebar(featureProperties) {
+      stats = Object.entries(featureProperties)
+      d3.select('#sidebar')
+        .selectAll('tr')
+        .data(stats)
+        .join('tr')
+        .selectAll('td')
+        .data(d => d)
+        .join('td')
+        .text(d => d)
     }
 
   </script>
