@@ -1,13 +1,68 @@
+<!DOCTYPE html>
 <html>
 
 <head>
+  <meta charset="utf-8">
+
+
+  <style>
+    #content .map path {
+      fill: #ddd;
+      stroke: #aaa;
+    }
+
+    #content .map path.highlight {
+      fill: #54c118;
+    }
+  </style>
 </head>
 
 <body>
-  <iframe title="Stromerzeugung Sachsen" aria-label="Germany saxony municipalities choropleth map"
-    id="datawrapper-chart-SOAhK" src="//datawrapper.dwcdn.net/SOAhK/1/" scrolling="no" frameborder="0"
-    style="width: 0; min-width: 100% !important; border: none;" height="400"></iframe>
-  <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", function (a) { if (void 0 !== a.data["datawrapper-height"]) for (var e in a.data["datawrapper-height"]) { var t = document.getElementById("datawrapper-chart-" + e) || document.querySelector("iframe[src*='" + e + "']"); t && (t.style.height = a.data["datawrapper-height"][e] + "px") } }) }();
+  <div id="content">
+    <svg width="1200px" height="800px">
+      <g class="map"></g>
+    </svg>
+  </div>
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script>
+    var width = 1200,
+      height = 800;
+
+    d3.json('/gemeinden-sn.json')
+      .then(function (data) {
+        drawMap('#content g.map', data);
+      })
+
+    function drawMap(selector, data) {
+      var projection = d3.geoMercator()
+        .fitSize([width, height], data)
+
+      var geoGenerator = d3.geoPath()
+        .projection(projection);
+
+      var u = d3.select(selector)
+        .selectAll('path')
+        .data(data.features);
+
+      u.enter()
+        .append('path')
+        .attr('d', geoGenerator)
+        .on('click', onClick);
+    }
+
+    function onClick(d, i) {
+      console.log(d.properties['GEN']);
+      d3.select('#content g.map')
+        .selectAll('path')
+        .classed('highlight', false);
+      this.classList.add('highlight');
+    }
+
+    function highlight(element) {
+
+    }
+
   </script>
 </body>
 
