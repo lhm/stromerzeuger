@@ -9,4 +9,4 @@ gdf = gdf[["id", "GEN", "BEZ", "AGS_0", "geometry"]]
 gdf.columns = ["id", "Name", "Bezeichnung", "AGS", "geometry"]
 
 result = gdf.merge(df, on="AGS", how="left")
-result.to_file(root / "data" / "nettonennleistung-sn.json", driver="GeoJSON")
+result.to_file(root / "data" / "nettonennleistung.json", driver="GeoJSON")

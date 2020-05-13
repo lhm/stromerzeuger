@@ -54,7 +54,7 @@
       height = 800,
       mapSelector = '#map g.map';
 
-    d3.json('/data/nettonennleistung-sn.json')
+    d3.json('./data/nettonennleistung.json')
       .then(function (data) {
         drawMap(mapSelector, data);
       })
