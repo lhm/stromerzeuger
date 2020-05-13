@@ -4,4 +4,6 @@ secrets
 files/*
 data/*
 !files/mastr-sample-ags-147-2014f.csv
+!files/gemeinden-sn.json
 !data/nettonennleistung.csv
+!data/nettonennleistung-sn.json

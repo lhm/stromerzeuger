@@ -54,7 +54,7 @@
       height = 800,
       mapSelector = '#map g.map';
 
-    d3.json('/gemeinden-sn.json')
+    d3.json('/data/nettonennleistung-sn.json')
       .then(function (data) {
         drawMap(mapSelector, data);
       })
@@ -90,7 +90,7 @@
 
     function updateSidebar(featureProperties) {
       stats = Object.entries(featureProperties)
-      d3.select('#sidebar')
+      d3.select('#sidebar table')
         .selectAll('tr')
         .data(stats)
         .join('tr')
