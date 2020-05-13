@@ -2,4 +2,3 @@ black
 flake8 ~= 3.7
 pandas ~= 1.0
 geopandas ~= 0.7
-datawrapper ~= 0.4
