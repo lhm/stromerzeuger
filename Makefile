@@ -1,7 +1,10 @@
-data: data/nettonennleistung.csv
+data: data/nettonennleistung.csv data/nettonennleistung.json
 
 data/nettonennleistung.csv: venv
 	./venv/bin/python ./scripts/process.py
+
+data/nettonennleistung.json: data/nettonennleistung.csv
+	./venv/bin/python ./scripts/geo.py
 
 venv: scripts/requirements.txt
 	[ -d ./venv ] || python3 -m venv venv
@@ -12,6 +15,7 @@ venv: scripts/requirements.txt
 
 clean:
 	rm -rf data/*.csv
+	rm -rf data/*.json
 
 clean-venv:
 	rm -rf venv
