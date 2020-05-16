@@ -1,26 +1,30 @@
 import pandas as pd
-from utils import root
+from utils import datadir
 
-df = pd.read_parquet(root / "data" / "raw.parquet")
+columns = [
+    "ENH_MastrNummer",
+    "ENH_Betriebsstatus",
+    "ENH_InbetriebnahmeDatum",
+    "ENH_Meldedatum",
+    "ENH_LetzteAktualisierung",
+    "ENH_Gemeindeschluessel",
+    "ENH_Bruttoleistung",
+    "ENH_Nettonennleistung",
+    "ENH_Energietraeger",
+]
 
-subset = df[["ENH_Gemeindeschluessel", "ENH_EinheitenTyp", "ENH_Nettonennleistung"]]
+df = pd.read_parquet(
+    datadir
+    / "200303_MaStR-Daten_registriert_ab_31-01-2019/raw/"
+    / "Tabelle_ENH.parquet",
+    columns=columns,
+)
+
+subset = df[["ENH_Gemeindeschluessel", "ENH_Energietraeger", "ENH_Nettonennleistung"]]
 subset.columns = ["AGS", "Energieträger", "Nettonennleistung"]
 
 # Filter for SN
 subset = subset[subset["AGS"].str.startswith("14")]
-
-# Filter for producers only
-producers = [
-    "Solareinheit",
-    "Stromspeichereinheit",
-    "Biomasse",
-    "Verbrennung",
-    "Windeinheit",
-    "Wasser",
-    "Gasverbrauchseinheit",
-    "Geothermie",
-]
-subset = subset[subset["Energieträger"].isin(producers)]
 
 # Group by AGS and calculate totals per energy source
 grouped = subset.groupby(["AGS", "Energieträger"])
@@ -37,4 +41,4 @@ totals.columns = ["Gesamt"]
 result = pivoted.merge(totals, left_index=True, right_index=True)
 result = result.round(2)
 
-result.to_csv(root / "data" / "nettonennleistung.csv")
+result.to_csv(datadir / "nettonennleistung.csv")

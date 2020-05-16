@@ -1,9 +1,11 @@
 data: data/nettonennleistung.csv data/nettonennleistung.json
 
-data/raw.parquet: venv
+prepare: data/200303_MaStR-Daten_registriert_ab_31-01-2019/raw/Tabelle_ENH.parquet
+
+data/200303_MaStR-Daten_registriert_ab_31-01-2019/raw/Tabelle_ENH.parquet: venv
 	./venv/bin/python ./scripts/convert.py
 
-data/nettonennleistung.csv: data/raw.parquet
+data/nettonennleistung.csv: prepare
 	./venv/bin/python ./scripts/process.py
 
 data/nettonennleistung.json: data/nettonennleistung.csv
@@ -19,8 +21,9 @@ venv: scripts/requirements.txt
 clean:
 	rm -rf data/*.csv
 	rm -rf data/*.json
+	rm -rf data/200303_MaStR-Daten_registriert_ab_31-01-2019/
 
 clean-venv:
 	rm -rf venv
 
-.PHONY: clean clean-venv publish
+.PHONY: clean clean-venv
